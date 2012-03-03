@@ -82,7 +82,7 @@ class Controllers
 				next = ->
 					req.controller = currentC
 					req.action = currentA
-					nextFunc()
+					nextFunc.apply this, arguments
 			
 			req.controller = controller
 			req.action = action
@@ -191,7 +191,7 @@ class Controllers
 		options = @options
 		(req, resp, next) ->
 			# Call the normal callback
-			result = callback req, resp, next
+			callback req, resp, next
 	
 			# Add helpers
 			self.addReqHelpers req, resp
@@ -230,7 +230,7 @@ class Controllers
 					if options.log
 						console.log "Controller '#{req.controller}' could not be found"
 					next 'route'
-					return result
+					return
 				
 				# Execute the action
 				action = controller[req.action]
@@ -238,15 +238,13 @@ class Controllers
 					if options.log
 						console.log "Action '#{req.action}' could not be found on controller '#{req.controller}' "
 					next 'route'
-					return result
+					return
 					
 				# Execute the controller with a nothing followup action
-				result = action req, resp, next
+				action req, resp, next
 			else
 				if options.log
 					console.log 'Controller or action was not specified, no action was called'
-			
-			return result
 	
 	overwriteRender: (req, resp) ->
 		self = this
@@ -266,24 +264,51 @@ class Controllers
 			# The view defaults to the action
 			view ?= req.action
 				
-			hasHints = resp.app.enabled 'hints'
-				
 			# Set the root directory as the controller directory
 			# if that doesnt work, try the shared directory
 			# disable hints because it comes up funny like
-			try
-				resp.app.set 'views', root + '/' + req.controller
-				resp.app.disable 'hints'
-				result = original.call resp, view, opts, fn, parent, sub
-			catch error
-				# If the above failed try getting view from 'shared'
-				resp.app.set 'views', root + '/' + self.options.sharedFolder
-				result = original.call resp, view, opts, fn, parent, sub
-			finally
-				resp.app.set 'views', root
+			hasHints = resp.app.enabled 'hints'
+			resp.app.disable 'hints'
+				
+			result = null
+			secondResult = null
+			
+			reset = ->
+				resp.app.set 'views', root	
+			
 				if hasHints
 					resp.app.enable 'hints'
+			
+			finalPass = (err, str) ->
+				reset()
+					
+				if fn?
+					fn err, str
+				else
+					if err?
+						req.next err
+					else
+						resp.send str
+			
+			secondRender = (err, str) ->
+				if err?
+					# If the first render failed failed try getting view from 'shared'
+					resp.app.set 'views', root + '/' + self.options.sharedFolder
+					secondResult = original.call resp, view, opts, finalPass, parent, sub
+				else
+					reset()
 				
+					if fn?
+						fn err, str
+					else
+						resp.send str
+				
+			resp.app.set 'views', root + '/' + req.controller
+			result = original.call resp, view, opts, secondRender, parent, sub
+			if secondResult?
+				result = secondResult
+
+			reset()
 			return result
 			
 	executeOnDirectory: (dir, action) ->
