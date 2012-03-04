@@ -152,9 +152,13 @@ class Controllers
 							for key, value of query
 								if first
 									first = false
-									result = result + '?' + key + '=' + value
+									result = result + '?' + key
+									if value? and value != ''
+										result = result + '=' + value
 								else
-									result = result + '&' + key + '=' + value
+									result = result + '&' + key
+									if value? and value != ''
+										result = result + '=' + value
 								
 							return result
 								
@@ -279,9 +283,12 @@ class Controllers
 				if hasHints
 					resp.app.enable 'hints'
 			
-			finalPass = (err, str) ->
+			finalPass = (err, err2, str) ->
 				reset()
 					
+				if err?
+					err = err + '\r\n\r\n' + err2
+				
 				if fn?
 					fn err, str
 				else
@@ -294,7 +301,7 @@ class Controllers
 				if err?
 					# If the first render failed failed try getting view from 'shared'
 					resp.app.set 'views', root + '/' + self.options.sharedFolder
-					secondResult = original.call resp, view, opts, finalPass, parent, sub
+					secondResult = original.call resp, view, opts, ((err2, str2) -> finalPass(err2, err, str2)), parent, sub
 				else
 					reset()
 				
