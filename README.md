@@ -2,6 +2,12 @@
 
 A simple mvc framework and route extender for Express.
 
+### Installation
+
+```bash
+$ npm install controller
+```
+
 ### Usage
 
 After setting all your middleware in Express, call the controllers method to initialise.
@@ -75,15 +81,20 @@ There are a number of useful calls available in the controllers and views.
 Controllers:
 ```
 req.controller - stores current controller
+
 req.action - stores current action
+
 req.executeController 'controller', 'action', cb - Executes another controller and overwrites the next function with the cb
 ```
 
 Views:
 ```
 controller - stores current controller
+
 action - stores current action
+
 getUrl 'controller', 'action', defaultParams, queryParams - returns a url corresponding to the controller/action specified
+
 getUrl 'action', defaultParams, queryParams - same as above but using the current controller
 ```
 
