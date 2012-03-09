@@ -5,7 +5,7 @@ A simple mvc framework and route extender for Express.
 ### Installation
 
 ```bash
-$ npm install controller
+$ npm install controllers
 ```
 
 ### Usage
