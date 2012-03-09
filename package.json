@@ -1,0 +1,16 @@
+{
+  "author": "Felix Jorkowski (http://jorkowski.com)",
+  "name": "controllers",
+  "description": "A simple mvc framework and route extender for Express",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ajorkowski/controllers",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ajorkowski/controllers.git"
+  },
+  "main": "lib/controllers.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

@@ -23,7 +23,7 @@ class Controllers
 				controller = path.basename reduced
 				self._controllers[controller] = require reduced
 				if self.options.log
-					console.log "Controller '" + controller + "' has been loaded"
+					console.log "Controller '#{controller}' has been loaded"
 				
 		# We are off to hijack the req.app.routes._route
 		# which is the point of contact of all our get/post/pull/etc methods.
