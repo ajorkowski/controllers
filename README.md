@@ -79,23 +79,20 @@ The render does not take an argument as the view for this action is automaticall
 There are a number of useful calls available in the controllers and views.
 
 Controllers:
+
 ```
-req.controller - stores current controller
-
-req.action - stores current action
-
-req.executeController 'controller', 'action', cb - Executes another controller and overwrites the next function with the cb
+req.controller  # stores current controller
+req.action # stores current action
+req.executeController 'controller', 'action', cb # Executes another controller and overwrites the next function with the cb
 ```
 
 Views:
+
 ```
-controller - stores current controller
-
-action - stores current action
-
-getUrl 'controller', 'action', defaultParams, queryParams - returns a url corresponding to the controller/action specified
-
-getUrl 'action', defaultParams, queryParams - same as above but using the current controller
+controller # stores current controller
+action # stores current action
+getUrl 'controller', 'action', defaultParams, queryParams # returns a url corresponding to the controller/action specified
+getUrl 'action', defaultParams, queryParams # same as above but using the current controller
 ```
 
 ### Options
