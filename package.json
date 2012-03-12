@@ -2,7 +2,7 @@
   "author": "Felix Jorkowski (http://jorkowski.com)",
   "name": "controllers",
   "description": "A simple mvc framework and route extender for Express",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/ajorkowski/controllers",
   "repository": {
     "type": "git",

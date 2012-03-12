@@ -278,8 +278,6 @@ class Controllers
 			secondResult = null
 			
 			reset = ->
-				resp.app.set 'views', root	
-			
 				if hasHints
 					resp.app.enable 'hints'
 			
@@ -300,8 +298,7 @@ class Controllers
 			secondRender = (err, str) ->
 				if err?
 					# If the first render failed failed try getting view from 'shared'
-					resp.app.set 'views', root + '/' + self.options.sharedFolder
-					secondResult = original.call resp, view, opts, ((err2, str2) -> finalPass(err2, err, str2)), parent, sub
+					secondResult = original.call resp, self.options.sharedFolder + '/' + view, opts, ((err2, str2) -> finalPass(err2, err, str2)), parent, sub
 				else
 					reset()
 				
@@ -310,8 +307,7 @@ class Controllers
 					else
 						resp.send str
 				
-			resp.app.set 'views', root + '/' + req.controller
-			result = original.call resp, view, opts, secondRender, parent, sub
+			result = original.call resp, req.controller + '/' + view, opts, secondRender, parent, sub
 			if secondResult?
 				result = secondResult
 
