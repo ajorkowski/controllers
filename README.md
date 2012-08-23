@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/ajorkowski/controllers.png)](http://travis-ci.org/ajorkowski/controllers)
 # Controllers
 
 A simple mvc framework and route extender for Express.
